@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Toko Satria - Sembako & Kebutuhan Harian</title>
+  <meta name="description" content="Belanja sembako mudah & cepat. Beras, minyak goreng, gula, tepung dan kebutuhan pokok lainnya. Antar sampai rumah." />
+
+  <style>
+    :root {
+      --accent: #2b8aef;
+      --muted: #666;
+      --card: #fff;
+      --bg: #f6f8fb;
+      --radius: 12px;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    * { box-sizing: border-box }
+    body { margin: 0; background: var(--bg); color: #222; line-height: 1.5 }
+    header { background: linear-gradient(90deg, rgba(43,138,239,0.95), rgba(70,180,245,0.95)); color: white; padding: 20px 16px }
+    .container { max-width: 1100px; margin: 0 auto; padding: 18px }
+
+    /* Header */
+    .brand { display: flex; align-items: center; gap: 14px }
+    .logo { width: 64px; height: 64px; border-radius: 10px; background: rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; font-weight: 700 }
+    .title { font-size: 20px; font-weight: 700 }
+    .subtitle { font-size: 13px; opacity: 0.95 }
+
+    nav { display: flex; gap: 12px; align-items: center; margin-top: 10px }
+    nav a { color: rgba(255,255,255,0.95); text-decoration: none; padding: 8px 10px; border-radius: 8px }
+    nav a:hover { background: rgba(255,255,255,0.08) }
+
+    /* Hero */
+    .hero { display: flex; gap: 24px; align-items: center; padding: 28px 0 }
+    .hero-text { flex: 1 }
+    .hero-cta { margin-top: 12px }
+    .btn { background: var(--card); color: var(--accent); border: none; padding: 10px 14px; border-radius: 10px; cursor: pointer; font-weight: 600; transition: all 0.2s }
+    .btn:hover { opacity: 0.9; transform: translateY(-1px) }
+    .btn-wa { background: #25D366; color: white }
+
+    /* Products */
+    .section { margin-top: 22px }
+    .section-title { font-size: 24px; margin-bottom: 16px }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 18px }
+    .card { background: var(--card); border-radius: 12px; padding: 12px; box-shadow: 0 6px 18px rgba(14,30,37,0.06); display: flex; flex-direction: column; transition: transform 0.2s }
+    .card:hover { transform: translateY(-5px) }
+    .card img { width: 100%; height: 150px; object-fit: cover; border-radius: 8px }
+    .product-title { font-weight: 700; margin: 10px 0 6px }
+    .price { font-weight: 700; color: var(--accent) }
+    .muted { color: var(--muted); font-size: 13px }
+    .card .actions { margin-top: auto; display: flex; gap: 8px }
+    .small { padding: 8px 10px; font-size: 14px }
+
+    /* Cart */
+    .cart-btn { position: fixed; right: 18px; bottom: 18px; background: var(--accent); color: #fff; padding: 12px 16px; border-radius: 14px; box-shadow: 0 10px 30px rgba(43,138,239,0.18); cursor: pointer; z-index: 100 }
+    .badge { background: #fff; color: var(--accent); border-radius: 999px; padding: 6px 8px; font-weight: 700; margin-left: 8px }
+
+    /* Footer */
+    footer { padding: 22px 0; margin-top: 34px; background: transparent; text-align: center }
+    .footer-grid { display: grid; grid-template-columns: 1fr 220px; gap: 18px }
+
+    /* Form */
+    input, textarea { width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #ddd; margin: 6px 0 }
+    textarea { min-height: 80px }
+
+    /* Modal */
+    .modal { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,0.35); padding: 20px; z-index: 1000 }
+    .modal.open { display: flex }
+    .modal-card { background: white; border-radius: 12px; padding: 16px; max-width: 520px; width: 100%; animation: modalFadeIn 0.3s }
+    .cart-list { max-height: 300px; overflow: auto; margin-top: 8px }
+    .flex { display: flex }
+    .space { justify-content: space-between }
+    .items-center { align-items: center }
+
+    /* Animations */
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: translateY(20px) }
+      to { opacity: 1; transform: translateY(0) }
+    }
+
+    /* Responsive */
+    @media (max-width: 720px) {
+      .hero { flex-direction: column; align-items: flex-start }
+      .footer-grid { grid-template-columns: 1fr }
+      .grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)) }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="brand">
+        <div class="logo">TS</div>
+        <div>
+          <div class="title">Toko Satria - Sembako & kebutuhan harian</div>
+          <div class="subtitle">Murah, lengkap, antar sampai rumah</div>
+        </div>
+      </div>
+      <nav>
+        <a href="#produk">Produk</a>
+        <a href="#cara">Cara Pemesanan</a>
+        <a href="#kontak">Kontak</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="hero-text">
+        <h1>Belanja sembako mudah & cepat</h1>
+        <p class="muted">Beras, minyak goreng, gula, tepung dan kebutuhan pokok lainnya. Pilih, masukkan keranjang, lalu pesan — kami antar!</p>
+        <div class="hero-cta">
+          <button class="btn" onclick="document.getElementById('produk').scrollIntoView({behavior:'smooth'})">Lihat Produk</button>
+        </div>
+      </div>
+      <div style="width:320px;">
+        <img src="IMG-20250820-WA00310.jpg" alt="Toko Satria" style="width:100%;border-radius:12px;object-fit:cover;">
+      </div>
+    </section>
+
+    <section id="produk" class="section">
+      <h2 class="section-title">Produk Terlaris</h2>
+      <div class="grid" id="productGrid">
+        <!-- Product cards inserted by JS -->
+      </div>
+    </section>
+
+    <section id="cara" class="section">
+      <h2 class="section-title">Cara Pemesanan</h2>
+      <ol class="muted" style="padding-left: 20px;">
+        <li>Pilih produk dan jumlahnya</li>
+        <li>Klik "Tambah ke keranjang"</li>
+        <li>Buka keranjang, isi alamat dan kontak</li>
+        <li>Klik "Pesan via WhatsApp" untuk konfirmasi</li>
+        <li>Kami akan menghubungi Anda via WhatsApp</li>
+      </ol>
+    </section>
+
+    <section id="kontak" class="section">
+      <h2 class="section-title">Kontak</h2>
+      <div class="footer-grid">
+        <div>
+          <p class="muted">Toko Satria - Toko sembako online kecil yang siap antar daerah sekitar. Jam operasional 07:00 - 21:00.</p>
+          <p><strong>Alamat:</strong> Jl. Pamahan, Jatireja, Kec Cikarang Timur</p>
+          <p><strong>WhatsApp:</strong> <a href="https://wa.me/62895327325472" target="_blank" style="color: var(--accent); text-decoration: none;">https://wa.me/+62895327325472</a></p>
+        </div>
+        <div>
+          <form id="orderForm">
+            <label for="name">Nama Lengkap</label>
+            <input id="name" placeholder="Nama Anda" required>
+            
+            <label for="addr">Alamat Lengkap</label>
+            <input id="addr" placeholder="Alamat pengiriman" required>
+            
+            <label for="phone">Nomor WhatsApp</label>
+            <input id="phone" type="tel" placeholder="Contoh: 081234567890" required>
+            
+            <label for="notes">Catatan (opsional)</label>
+            <textarea id="notes" placeholder="Catatan tambahan untuk pesanan"></textarea>
+            
+            <button class="btn btn-wa" type="button" onclick="sendToWhatsApp()">
+              Pesan via WhatsApp
+            </button>
+            
+            <div class="muted" style="margin-top:8px;font-size:13px">
+              Anda akan diarahkan ke WhatsApp untuk menyelesaikan pemesanan.
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="container">
+        <p class="muted">© <span id="year"></span> Toko Satria. Dibuat dengan ❤️ - UMKM Lokal.</p>
+      </div>
+    </footer>
+
+    <!-- Cart button -->
+    <button class="cart-btn" id="openCartBtn" onclick="toggleCart()">
+      Keranjang (<span id="cartCount">0</span>)
+    </button>
+
+    <!-- Modal cart -->
+    <div id="cartModal" class="modal" aria-hidden="true">
+      <div class="modal-card">
+        <div class="flex space items-center">
+          <h3>Keranjang Belanja</h3>
+          <button onclick="toggleCart()" class="btn small">Tutup</button>
+        </div>
+        
+        <div class="cart-list" id="cartList">
+          <!-- Cart items will be inserted here -->
+        </div>
+        
+        <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #eee;">
+          <div class="flex space">
+            <div>
+              <div class="muted">Subtotal</div>
+              <div class="price">Rp <span id="cartTotal">0</span></div>
+            </div>
+            <div>
+              <button class="btn btn-wa" onclick="sendToWhatsApp()">
+                Pesan via WhatsApp
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Demo product data
+    const products = [
+      {id:1, name:'Beras 5kg', price:65000, desc:'Beras premium kualitas terbaik', img:'IMG-20250820-WA0039.jpg'},
+      {id:2, name:'Minyak Goreng 2L', price:25000, desc:'Minyak goreng sawit pilihan', img:'IMG-20250820-WA0038.jpg'},
+      {id:3, name:'Gula Pasir 1kg', price:12000, desc:'Gula pasir putih bersih', img:'IMG-20250820-WA0037.jpg'},
+      {id:4, name:'Tepung Terigu 1kg', price:11000, desc:'Tepung serbaguna protein sedang', img:'IMG-20250820-WA0036.jpg'},
+      {id:5, name:'Telur 1Kg (~12 pcs)', price:30000, desc:'Telur ayam segar', img:'IMG-20250820-WA0035.jpg'},
+      {id:6, name:'Sarden Kaleng 425g', price:22000, desc:'Sarden dalam saus cabai', img:'IMG-20250820-WA0034.jpg'},
+      {id:7, name:'Mie Instan 1Dus', price:60000, desc:'Berisi 40 bungkus mie instan', img:'IMG-20250820-WA0033.jpg'},
+      {id:8, name:'Aqua botol 1 dus', price:75000, desc:'Berisi 24 botol aqua', img:'IMG-20250817-WA0056.jpg'}
+    ];
+
+    const cart = {}; // {productId: quantity}
+
+    // Format number to Rupiah
+    function formatRupiah(n) {
+      return new Intl.NumberFormat('id-ID', { 
+        style: 'currency', 
+        currency: 'IDR',
+        maximumFractionDigits: 0
+      }).format(n).replace('Rp', 'Rp ');
+    }
+
+    // Render products to the page
+    function renderProducts() {
+      const grid = document.getElementById('productGrid');
+      grid.innerHTML = '';
+      
+      products.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <img src="${p.img}" alt="${p.name}" loading="lazy">
+          <div class="product-title">${p.name}</div>
+          <div class="muted">${p.desc}</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px">
+            <div class="price">${formatRupiah(p.price)}</div>
+          </div>
+          <div class="actions">
+            <button class="btn small" onclick="addToCart(${p.id})">Tambah ke keranjang</button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    // Add product to cart
+    function addToCart(id) {
+      cart[id] = (cart[id] || 0) + 1;
+      updateCartUI();
+      
+      // Show feedback
+      const product = products.find(p => p.id === id);
+      alert(`${product.name} ditambahkan ke keranjang`);
+    }
+
+    // Update cart UI (count and list)
+    function updateCartUI() {
+      // Update cart count
+      const count = Object.values(cart).reduce((sum, qty) => sum + qty, 0);
+      document.getElementById('cartCount').textContent = count;
+      
+      // Render cart items
+      renderCartList();
+      
+      // Save to localStorage
+      localStorage.setItem('tokoSatriaCart', JSON.stringify(cart));
+    }
+
+    // Render cart items list
+    function renderCartList() {
+      const list = document.getElementById('cartList');
+      list.innerHTML = '';
+      
+      let total = 0;
+      
+      for(const id in cart) {
+        const qty = cart[id];
+        const product = products.find(p => p.id == id);
+        const subtotal = product.price * qty;
+        total += subtotal;
+        
+        const item = document.createElement('div');
+        item.style.padding = '12px 0';
+        item.style.borderBottom = '1px solid #f1f1f1';
+        
+        item.innerHTML = `
+          <div class="flex space">
+            <div>
+              <div style="font-weight:700">${product.name}</div>
+              <div class="muted">${formatRupiah(product.price)} x ${qty}</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-weight:700">${formatRupiah(subtotal)}</div>
+              <div style="margin-top:6px">
+                <button onclick="changeQty(${id}, ${qty-1})" class="small">-</button>
+                <button onclick="changeQty(${id}, ${qty+1})" class="small">+</button>
+                <button onclick="removeItem(${id})" class="small">Hapus</button>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        list.appendChild(item);
+      }
+      
+      // Update total
+      document.getElementById('cartTotal').textContent = formatRupiah(total).replace('Rp ', '');
+      
+      // Show empty message if cart is empty
+      if(Object.keys(cart).length === 0) {
+        list.innerHTML = '<div style="text-align:center;padding:20px 0" class="muted">Keranjang belanja kosong</div>';
+      }
+    }
+
+    // Change product quantity in cart
+    function changeQty(id, newQty) {
+      if(newQty <= 0) {
+        delete cart[id];
+      } else {
+        cart[id] = newQty;
+      }
+      updateCartUI();
+    }
+
+    // Remove item from cart
+    function removeItem(id) {
+      delete cart[id];
+      updateCartUI();
+    }
+
+    // Toggle cart modal
+    function toggleCart() {
+      const modal = document.getElementById('cartModal');
+      modal.classList.toggle('open');
+    }
+
+    // Send order to WhatsApp
+    function sendToWhatsApp() {
+      const name = document.getElementById('name').value.trim();
+      const addr = document.getElementById('addr').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const notes = document.getElementById('notes').value.trim();
+      
+      // Validate form
+      if(!name || !addr || !phone) {
+        alert('Harap lengkapi semua data yang diperlukan');
+        return;
+      }
+      
+      const count = Object.values(cart).reduce((sum, qty) => sum + qty, 0);
+      if(count === 0) {
+        alert('Keranjang masih kosong. Tambahkan produk terlebih dahulu.');
+        return;
+      }
+      
+      // Format WhatsApp message
+      let message = `📦 *PESANAN TOKO SATRIA* 📦\n\n`;
+      message += `Halo Toko Satria, saya ingin memesan:\n\n`;
+      
+      // Add products list
+      let total = 0;
+      for(const id in cart) {
+        const qty = cart[id];
+        const product = products.find(p => p.id == id);
+        const subtotal = product.price * qty;
+        total += subtotal;
+        message += `➡️ ${product.name} (${qty}x): ${formatRupiah(subtotal)}\n`;
+      }
+      
+      // Add order summary
+      message += `\n💰 *Total Pesanan:* ${formatRupiah(total)}\n\n`;
+      
+      // Add customer info
+      message += `👤 *Data Pemesan:*\n`;
+      message += `📛 Nama: ${name}\n`;
+      message += `🏠 Alamat: ${addr}\n`;
+      message += `📱 WhatsApp: ${phone}\n`;
+      
+      // Add notes if any
+      if(notes) {
+        message += `\n📝 *Catatan:* ${notes}\n`;
+      }
+      
+      message += `\nMohon konfirmasi ketersediaan barang dan total pembayaran. Terima kasih.`;
+      
+      // Encode for URL
+      const encodedMessage = encodeURIComponent(message);
+      const whatsappNumber = '62895327325472';
+      
+      // Confirm before opening WhatsApp
+      if(confirm('Anda akan diarahkan ke WhatsApp untuk menyelesaikan pemesanan. Lanjutkan?')) {
+        // Open WhatsApp
+        window.open(`https://wa.me/${whatsappNumber}?text=${encodedMessage}`, '_blank');
+        
+        // Clear cart after order
+        for(const id in cart) delete cart[id];
+        updateCartUI();
+        document.getElementById('orderForm').reset();
+        
+        // Close cart modal if open
+        document.getElementById('cartModal').classList.remove('open');
+      }
+    }
+
+    // Load cart from localStorage
+    function loadCart() {
+      const savedCart = localStorage.getItem('tokoSatriaCart');
+      if(savedCart) {
+        Object.assign(cart, JSON.parse(savedCart));
+      }
+    }
+
+    // Initialize the page
+    function init() {
+      // Set current year in footer
+      document.getElementById('year').textContent = new Date().getFullYear();
+      
+      // Load cart from storage
+      loadCart();
+      
+      // Render products and cart
+      renderProducts();
+      updateCartUI();
+    }
+
+    // Start the app
+    init();
+  </script>
+</body>
+</html>
